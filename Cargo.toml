@@ -1,0 +1,6 @@
+[package]
+name = "guessing_game"
+version = "0.1.0"
+authors = ["Krzysztof Suszyński <krzysztof.suszynski@wavesoftware.pl>"]
+
+[dependencies]
