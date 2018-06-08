@@ -4,3 +4,4 @@ version = "0.1.0"
 authors = ["Krzysztof Suszyński <krzysztof.suszynski@wavesoftware.pl>"]
 
 [dependencies]
+rand = "0.4.0"
