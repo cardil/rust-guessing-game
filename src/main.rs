@@ -1,44 +1,38 @@
 extern crate rand;
 
-use std::io;
-use std::cmp::Ordering;
-use rand::Rng;
+use game::Views;
+use game::CheckGuess;
+use game::GameEnded;
+use game::Game;
+
+mod secret;
+mod view;
+mod game;
 
 fn main() {
-  println!("Guess the number between 1 and 100!");
+  view::print_welcome_message();
 
-  let secret = rand::thread_rng()
-    .gen_range(1, 101);
+  let mut game = Game::new(Views {
+    lower: view::print_to_small,
+    higher: view::print_to_big,
+    exact: view::print_win_in
+  });
 
-  let mut steps: u32 = 0;
   loop {
-    println!("Please input your guess.");
+    view::print_please_input();
 
-    let mut guess = String::new();
-
-    io::stdin()
-      .read_line(&mut guess)
-      .expect("Failed to read line");
-
-    let guess: u32 = match guess
-      .trim()
-      .parse() {
-        Ok(num) => num,
-        Err(_)  => {
-          println!("Please type a number!");
-          continue;
-        }
-      };
-
-    steps = steps + 1;
-
-    match guess.cmp(&secret) {
-      Ordering::Less    => println!("Too small!"),
-      Ordering::Greater => println!("Too big!"),
-      Ordering::Equal   => {
-        println!("You win in {} guesses!", steps);
-        break;
+    let guess = match view::read_guess() {
+      Ok(num) => num, Err(_) => {
+        view::print_please_give_number();
+        continue;
       }
+    };
+
+
+    game.check_guess(guess);
+
+    if game.game_has_ended() {
+      break;
     }
   }
 }
